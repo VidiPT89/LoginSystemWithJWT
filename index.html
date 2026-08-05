@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>🔐 Login System JWT</title>
+  <title>🔐 Login System JWT - Autenticação Segura</title>
   <style>
     * {
       margin: 0;
@@ -18,6 +18,8 @@
       --light: #F5F5F5;
       --glass-bg: rgba(255, 122, 0, 0.1);
       --glass-border: rgba(255, 122, 0, 0.2);
+      --error: #FF4444;
+      --success: #44FF44;
     }
 
     body {
@@ -25,7 +27,6 @@
       background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
       min-height: 100vh;
       color: #fff;
-      overflow: hidden;
     }
 
     /* ========== SPLASH SCREEN ========== */
@@ -69,38 +70,6 @@
       letter-spacing: 1px;
     }
 
-    .splash-creator {
-      animation: fadeInUp 0.8s ease-out 0.8s backwards;
-    }
-
-    .creator-text {
-      font-size: 0.95rem;
-      color: #aaa;
-      margin-bottom: 1rem;
-    }
-
-    .creator-links {
-      display: flex;
-      gap: 1.5rem;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
-
-    .creator-link {
-      color: #FF7A00;
-      text-decoration: none;
-      font-size: 0.9rem;
-      padding: 0.5rem 1rem;
-      border: 1px solid #FF7A00;
-      border-radius: 25px;
-      transition: all 0.3s ease;
-    }
-
-    .creator-link:hover {
-      background: #FF7A00;
-      color: #000;
-    }
-
     @keyframes splashFadeOut {
       to {
         opacity: 0;
@@ -111,17 +80,6 @@
     @keyframes splashSlideUp {
       from {
         transform: translateY(30px);
-        opacity: 0;
-      }
-      to {
-        transform: translateY(0);
-        opacity: 1;
-      }
-    }
-
-    @keyframes fadeInUp {
-      from {
-        transform: translateY(20px);
         opacity: 0;
       }
       to {
@@ -165,6 +123,7 @@
       gap: 0.8rem;
       font-size: 1.5rem;
       font-weight: 700;
+      cursor: pointer;
     }
 
     .logo-icon {
@@ -176,6 +135,17 @@
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+    }
+
+    .user-info {
+      font-size: 0.9rem;
+      color: #aaa;
     }
 
     .language-toggle {
@@ -213,10 +183,15 @@
       padding: 2rem;
     }
 
-    .welcome-section {
-      text-align: center;
-      max-width: 600px;
+    .section {
+      display: none;
+      max-width: 500px;
+      width: 100%;
       animation: slideInFromBottom 0.8s ease-out 3.2s backwards;
+    }
+
+    .section.active {
+      display: block;
     }
 
     @keyframes slideInFromBottom {
@@ -230,70 +205,78 @@
       }
     }
 
-    .welcome-title {
-      font-size: 3rem;
+    .section-title {
+      font-size: 2.5rem;
       font-weight: 700;
-      margin-bottom: 1rem;
+      margin-bottom: 0.5rem;
       background: linear-gradient(135deg, #FF7A00, #FFAA00);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
     }
 
-    .welcome-description {
-      font-size: 1.2rem;
-      color: #ccc;
-      margin-bottom: 2rem;
-      line-height: 1.6;
-    }
-
-    .features-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-      gap: 1rem;
+    .section-subtitle {
+      font-size: 1rem;
+      color: #aaa;
       margin-bottom: 2rem;
     }
 
-    .feature-card {
-      padding: 1.5rem;
-      background: var(--glass-bg);
+    /* ========== FORM STYLES ========== */
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+      color: #fff;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 1rem;
       border: 1px solid var(--glass-border);
-      border-radius: 15px;
-      backdrop-filter: blur(10px);
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.05);
+      color: #fff;
+      font-size: 1rem;
       transition: all 0.3s ease;
     }
 
-    .feature-card:hover {
-      transform: translateY(-5px);
+    .form-input::placeholder {
+      color: #666;
+    }
+
+    .form-input:focus {
+      outline: none;
       border-color: var(--primary);
-      background: rgba(255, 122, 0, 0.15);
+      background: rgba(255, 122, 0, 0.1);
+      box-shadow: 0 0 10px rgba(255, 122, 0, 0.2);
     }
 
-    .feature-icon {
-      font-size: 2rem;
-      margin-bottom: 0.5rem;
+    .form-error {
+      color: var(--error);
+      font-size: 0.85rem;
+      margin-top: 0.3rem;
     }
 
-    .feature-name {
-      font-size: 0.9rem;
-      font-weight: 600;
+    .form-success {
+      color: var(--success);
+      font-size: 0.85rem;
+      margin-top: 0.3rem;
     }
 
-    .btn-group {
-      display: flex;
-      gap: 1rem;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
-
+    /* ========== BUTTONS ========== */
     .btn {
-      padding: 1rem 2rem;
+      padding: 1rem;
       border: none;
-      border-radius: 25px;
+      border-radius: 10px;
       font-weight: 600;
       cursor: pointer;
       transition: all 0.3s ease;
       font-size: 1rem;
+      width: 100%;
     }
 
     .btn-primary {
@@ -306,15 +289,146 @@
       box-shadow: 0 8px 20px rgba(255, 122, 0, 0.3);
     }
 
+    .btn-primary:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
     .btn-secondary {
       background: transparent;
       color: #FF7A00;
       border: 2px solid #FF7A00;
+      margin-top: 1rem;
     }
 
     .btn-secondary:hover {
       background: #FF7A00;
       color: #000;
+    }
+
+    .btn-logout {
+      padding: 0.5rem 1rem;
+      background: transparent;
+      color: #FF7A00;
+      border: 1px solid #FF7A00;
+      border-radius: 20px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 0.9rem;
+    }
+
+    .btn-logout:hover {
+      background: #FF7A00;
+      color: #000;
+    }
+
+    /* ========== AUTH LINK ========== */
+    .auth-link {
+      text-align: center;
+      margin-top: 1.5rem;
+      color: #aaa;
+    }
+
+    .auth-link a {
+      color: #FF7A00;
+      text-decoration: none;
+      cursor: pointer;
+      font-weight: 600;
+      transition: color 0.3s ease;
+    }
+
+    .auth-link a:hover {
+      color: #FFAA00;
+    }
+
+    /* ========== DASHBOARD ========== */
+    .dashboard-card {
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: 15px;
+      padding: 2rem;
+      margin-bottom: 1.5rem;
+      backdrop-filter: blur(10px);
+    }
+
+    .card-title {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      color: #FF7A00;
+    }
+
+    .card-info {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 0.8rem;
+      padding-bottom: 0.8rem;
+      border-bottom: 1px solid var(--glass-border);
+    }
+
+    .card-label {
+      color: #aaa;
+      font-weight: 600;
+    }
+
+    .card-value {
+      color: #fff;
+      word-break: break-all;
+      max-width: 250px;
+    }
+
+    .copy-btn {
+      background: transparent;
+      border: 1px solid #FF7A00;
+      color: #FF7A00;
+      padding: 0.3rem 0.8rem;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 0.8rem;
+      transition: all 0.3s ease;
+    }
+
+    .copy-btn:hover {
+      background: #FF7A00;
+      color: #000;
+    }
+
+    /* ========== ALERT ========== */
+    .alert {
+      padding: 1rem;
+      border-radius: 10px;
+      margin-bottom: 1rem;
+      display: none;
+    }
+
+    .alert.show {
+      display: block;
+      animation: slideInFromTop 0.3s ease-out;
+    }
+
+    .alert-success {
+      background: rgba(68, 255, 68, 0.1);
+      border: 1px solid rgba(68, 255, 68, 0.3);
+      color: var(--success);
+    }
+
+    .alert-error {
+      background: rgba(255, 68, 68, 0.1);
+      border: 1px solid rgba(255, 68, 68, 0.3);
+      color: var(--error);
+    }
+
+    @keyframes slideInFromTop {
+      from {
+        transform: translateY(-20px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
     }
 
     /* ========== FOOTER ========== */
@@ -328,10 +442,6 @@
       background: var(--glass-bg);
     }
 
-    .footer-links {
-      margin-bottom: 1rem;
-    }
-
     .footer-link {
       color: #FF7A00;
       text-decoration: none;
@@ -343,38 +453,12 @@
       color: #FFAA00;
     }
 
-    /* ========== RESPONSIVE ========== */
-    @media (max-width: 768px) {
-      .welcome-title {
-        font-size: 2rem;
-      }
-
-      .splash-title {
-        font-size: 2rem;
-      }
-
-      .features-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-
-      .btn-group {
-        flex-direction: column;
-      }
-
-      .btn {
-        width: 100%;
-      }
-
-      .logo-text {
-        display: none;
-      }
-    }
-
-    /* ========== ANIMATIONS ========== */
+    /* ========== FLOATING ORBS ========== */
     .floating-orbs {
       position: fixed;
       pointer-events: none;
       z-index: 0;
+      inset: 0;
     }
 
     .orb {
@@ -404,6 +488,31 @@
       0%, 100% { transform: translate(0, 0); }
       50% { transform: translate(30px, 30px); }
     }
+
+    /* ========== RESPONSIVE ========== */
+    @media (max-width: 768px) {
+      .section-title {
+        font-size: 2rem;
+      }
+
+      .header {
+        flex-wrap: wrap;
+        gap: 1rem;
+      }
+
+      .header-right {
+        width: 100%;
+        justify-content: space-between;
+      }
+
+      .logo-text {
+        display: none;
+      }
+
+      .card-value {
+        max-width: 150px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -420,126 +529,321 @@
       <h1 class="splash-title" id="splash-title">Login System JWT</h1>
       <p class="splash-subtitle" id="splash-subtitle">Autenticação Segura</p>
     </div>
-
-    <div class="splash-creator">
-      <p class="creator-text" id="developed-by">Desenvolvido por David Arsénio Martins</p>
-      <div class="creator-links">
-        <a href="https://ividi.dev/" class="creator-link" target="_blank">🌐 ividi.dev</a>
-        <a href="https://github.com/VidiPT89/" class="creator-link" target="_blank">💻 GitHub</a>
-      </div>
-    </div>
   </div>
 
   <!-- Main Interface -->
   <div class="container">
     <!-- Header -->
     <header class="header">
-      <div class="logo">
+      <div class="logo" onclick="navigateTo('welcome')">
         <span class="logo-icon">🔐</span>
-        <span class="logo-text" id="header-title">Login JWT</span>
+        <span class="logo-text">Login JWT</span>
       </div>
 
-      <div class="language-toggle">
-        <button class="lang-btn active" onclick="setLanguage('pt')" id="pt-btn">PT</button>
-        <button class="lang-btn" onclick="setLanguage('en')" id="en-btn">EN</button>
+      <div class="header-right">
+        <div class="user-info" id="user-info" style="display: none;">
+          <span id="username-display"></span>
+        </div>
+
+        <div class="language-toggle">
+          <button class="lang-btn active" onclick="setLanguage('pt')" id="pt-btn">PT</button>
+          <button class="lang-btn" onclick="setLanguage('en')" id="en-btn">EN</button>
+        </div>
+
+        <button class="btn-logout" id="logout-btn" style="display: none;" onclick="logout()">
+          <span id="logout-text">Sair</span>
+        </button>
       </div>
     </header>
 
     <!-- Main Content -->
     <main class="main">
-      <section class="welcome-section">
-        <h1 class="welcome-title" id="welcome-title">🔐 Sistema de Login</h1>
-        <p class="welcome-description" id="welcome-desc">
-          Autenticação segura e profissional com JWT, bcrypt e PostgreSQL
-        </p>
+      <!-- WELCOME SECTION -->
+      <section class="section active" id="welcome">
+        <h1 class="section-title" id="welcome-title">🔐 Sistema de Login</h1>
+        <p class="section-subtitle" id="welcome-desc">Autenticação segura e profissional</p>
 
-        <div class="features-grid">
-          <div class="feature-card">
-            <div class="feature-icon">👤</div>
-            <div class="feature-name" id="feat1">Registro</div>
+        <div class="btn-group" style="display: flex; gap: 1rem; flex-direction: column;">
+          <button class="btn btn-primary" onclick="navigateTo('login')" id="btn-login-welcome">
+            <span id="btn-login-welcome-text">Fazer Login</span>
+          </button>
+          <button class="btn btn-secondary" onclick="navigateTo('register')" id="btn-register-welcome">
+            <span id="btn-register-welcome-text">Criar Conta</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- LOGIN SECTION -->
+      <section class="section" id="login">
+        <h1 class="section-title" id="login-title">Fazer Login</h1>
+        <p class="section-subtitle" id="login-subtitle">Aceda à sua conta</p>
+
+        <div id="login-alert" class="alert"></div>
+
+        <form onsubmit="handleLogin(event)">
+          <div class="form-group">
+            <label class="form-label" id="email-label">Email</label>
+            <input type="email" id="login-email" class="form-input" required placeholder="seu_email@example.com">
+            <div id="login-email-error" class="form-error"></div>
           </div>
-          <div class="feature-card">
-            <div class="feature-icon">🔑</div>
-            <div class="feature-name" id="feat2">Login Seguro</div>
+
+          <div class="form-group">
+            <label class="form-label" id="password-label">Senha</label>
+            <input type="password" id="login-password" class="form-input" required placeholder="••••••••">
+            <div id="login-password-error" class="form-error"></div>
           </div>
-          <div class="feature-card">
-            <div class="feature-icon">🔓</div>
-            <div class="feature-name" id="feat3">JWT Tokens</div>
+
+          <button type="submit" class="btn btn-primary" id="login-btn">
+            <span id="login-btn-text">Login</span>
+          </button>
+        </form>
+
+        <div class="auth-link">
+          <span id="register-link-text">Não tem conta? </span>
+          <a onclick="navigateTo('register')" id="register-link">Registar-se</a>
+        </div>
+
+        <div class="auth-link">
+          <a onclick="navigateTo('reset')" id="forgot-password-link">Esqueceu a senha?</a>
+        </div>
+      </section>
+
+      <!-- REGISTER SECTION -->
+      <section class="section" id="register">
+        <h1 class="section-title" id="register-title">Criar Conta</h1>
+        <p class="section-subtitle" id="register-subtitle">Junte-se a nós agora</p>
+
+        <div id="register-alert" class="alert"></div>
+
+        <form onsubmit="handleRegister(event)">
+          <div class="form-group">
+            <label class="form-label" id="username-label">Nome de Utilizador</label>
+            <input type="text" id="register-username" class="form-input" required placeholder="seu_utilizador">
+            <div id="register-username-error" class="form-error"></div>
           </div>
-          <div class="feature-card">
-            <div class="feature-icon">📧</div>
-            <div class="feature-name" id="feat4">Reset Password</div>
+
+          <div class="form-group">
+            <label class="form-label" id="email-register-label">Email</label>
+            <input type="email" id="register-email" class="form-input" required placeholder="seu_email@example.com">
+            <div id="register-email-error" class="form-error"></div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" id="password-register-label">Senha</label>
+            <input type="password" id="register-password" class="form-input" required placeholder="••••••••">
+            <div id="register-password-error" class="form-error"></div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" id="password-confirm-label">Confirmar Senha</label>
+            <input type="password" id="register-password-confirm" class="form-input" required placeholder="••••••••">
+            <div id="register-password-confirm-error" class="form-error"></div>
+          </div>
+
+          <button type="submit" class="btn btn-primary" id="register-btn">
+            <span id="register-btn-text">Registar</span>
+          </button>
+        </form>
+
+        <div class="auth-link">
+          <span id="login-link-text">Já tem conta? </span>
+          <a onclick="navigateTo('login')" id="login-link">Fazer Login</a>
+        </div>
+      </section>
+
+      <!-- DASHBOARD SECTION -->
+      <section class="section" id="dashboard">
+        <h1 class="section-title" id="dashboard-title">Dashboard</h1>
+        <p class="section-subtitle" id="dashboard-subtitle">Bem-vindo!</p>
+
+        <div id="dashboard-alert" class="alert"></div>
+
+        <div class="dashboard-card">
+          <div class="card-title" id="profile-card-title">👤 Perfil</div>
+          <div class="card-info">
+            <span class="card-label" id="user-email-label">Email:</span>
+            <span class="card-value" id="profile-email">-</span>
+          </div>
+          <div class="card-info">
+            <span class="card-label" id="user-username-label">Utilizador:</span>
+            <span class="card-value" id="profile-username">-</span>
+          </div>
+          <div class="card-info">
+            <span class="card-label" id="user-id-label">ID:</span>
+            <span class="card-value" id="profile-id">-</span>
           </div>
         </div>
 
-        <div class="btn-group">
-          <button class="btn btn-primary" onclick="window.location.href='http://localhost:3000/api/health'">
-            <span id="btn-api">Testar API</span>
+        <div class="dashboard-card">
+          <div class="card-title" id="token-card-title">🔑 Access Token</div>
+          <div class="card-info">
+            <span class="card-value" id="access-token" style="word-break: break-all; max-width: 300px; font-size: 0.8rem;">-</span>
+            <button class="copy-btn" id="copy-access-btn" onclick="copyToClipboard('access-token')">
+              <span id="copy-access-text">Copiar</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="dashboard-card">
+          <div class="card-title" id="refresh-card-title">🔄 Refresh Token</div>
+          <div class="card-info">
+            <span class="card-value" id="refresh-token" style="word-break: break-all; max-width: 300px; font-size: 0.8rem;">-</span>
+            <button class="copy-btn" id="copy-refresh-btn" onclick="copyToClipboard('refresh-token')">
+              <span id="copy-refresh-text">Copiar</span>
+            </button>
+          </div>
+        </div>
+
+        <button class="btn btn-secondary" onclick="navigateTo('reset')" id="btn-reset-dashboard">
+          <span id="change-password-text">Alterar Senha</span>
+        </button>
+      </section>
+
+      <!-- RESET PASSWORD SECTION -->
+      <section class="section" id="reset">
+        <h1 class="section-title" id="reset-title">Alterar Senha</h1>
+        <p class="section-subtitle" id="reset-subtitle">Atualize sua senha</p>
+
+        <div id="reset-alert" class="alert"></div>
+
+        <form onsubmit="handleResetRequest(event)">
+          <div class="form-group">
+            <label class="form-label" id="email-reset-label">Email</label>
+            <input type="email" id="reset-email" class="form-input" required placeholder="seu_email@example.com">
+            <div id="reset-email-error" class="form-error"></div>
+          </div>
+
+          <button type="submit" class="btn btn-primary" id="reset-request-btn">
+            <span id="reset-request-btn-text">Enviar Link</span>
           </button>
-          <button class="btn btn-secondary" onclick="window.location.href='https://github.com/VidiPT89/LoginSystemWithJWT'">
-            <span id="btn-github">Ver GitHub</span>
-          </button>
+        </form>
+
+        <div class="auth-link">
+          <a onclick="navigateTo('login')" id="back-to-login-link">Voltar ao Login</a>
         </div>
       </section>
     </main>
 
     <!-- Footer -->
     <footer class="footer">
-      <div class="footer-links">
+      <div style="margin-bottom: 1rem;">
         <a href="https://ividi.dev/" class="footer-link" target="_blank">🌐 ividi.dev</a>
         <a href="https://github.com/VidiPT89/" class="footer-link" target="_blank">💻 GitHub</a>
-        <a href="https://www.linkedin.com/in/david-martins-9b0129270/" class="footer-link" target="_blank">💼 LinkedIn</a>
       </div>
       <p id="footer-text">Desenvolvido por David Arsénio Martins • 2026 © Todos os direitos reservados</p>
     </footer>
   </div>
 
   <script>
-    // Translations
+    // ========== TRANSLATIONS ==========
     const translations = {
       pt: {
         'splash-title': 'Login System JWT',
         'splash-subtitle': 'Autenticação Segura',
-        'developed-by': 'Desenvolvido por David Arsénio Martins',
-        'header-title': 'Login JWT',
         'welcome-title': '🔐 Sistema de Login',
-        'welcome-desc': 'Autenticação segura e profissional com JWT, bcrypt e PostgreSQL',
-        'feat1': 'Registro',
-        'feat2': 'Login Seguro',
-        'feat3': 'JWT Tokens',
-        'feat4': 'Reset Password',
-        'btn-api': 'Testar API',
-        'btn-github': 'Ver GitHub',
-        'footer-text': 'Desenvolvido por David Arsénio Martins • 2026 © Todos os direitos reservados'
+        'welcome-desc': 'Autenticação segura e profissional',
+        'btn-login-welcome-text': 'Fazer Login',
+        'btn-register-welcome-text': 'Criar Conta',
+        'login-title': 'Fazer Login',
+        'login-subtitle': 'Aceda à sua conta',
+        'email-label': 'Email',
+        'password-label': 'Senha',
+        'login-btn-text': 'Login',
+        'register-link-text': 'Não tem conta? ',
+        'register-link': 'Registar-se',
+        'forgot-password-link': 'Esqueceu a senha?',
+        'register-title': 'Criar Conta',
+        'register-subtitle': 'Junte-se a nós agora',
+        'username-label': 'Nome de Utilizador',
+        'email-register-label': 'Email',
+        'password-register-label': 'Senha',
+        'password-confirm-label': 'Confirmar Senha',
+        'register-btn-text': 'Registar',
+        'login-link-text': 'Já tem conta? ',
+        'login-link': 'Fazer Login',
+        'dashboard-title': 'Dashboard',
+        'dashboard-subtitle': 'Bem-vindo!',
+        'profile-card-title': '👤 Perfil',
+        'user-email-label': 'Email:',
+        'user-username-label': 'Utilizador:',
+        'user-id-label': 'ID:',
+        'token-card-title': '🔑 Access Token',
+        'refresh-card-title': '🔄 Refresh Token',
+        'copy-access-text': 'Copiar',
+        'copy-refresh-text': 'Copiar',
+        'change-password-text': 'Alterar Senha',
+        'reset-title': 'Alterar Senha',
+        'reset-subtitle': 'Atualize sua senha',
+        'email-reset-label': 'Email',
+        'reset-request-btn-text': 'Enviar Link',
+        'back-to-login-link': 'Voltar ao Login',
+        'footer-text': 'Desenvolvido por David Arsénio Martins • 2026 © Todos os direitos reservados',
+        'logout-text': 'Sair',
+        'pt-btn': 'PT',
+        'en-btn': 'EN',
       },
       en: {
         'splash-title': 'Login System JWT',
         'splash-subtitle': 'Secure Authentication',
-        'developed-by': 'Developed by David Arsénio Martins',
-        'header-title': 'Login JWT',
         'welcome-title': '🔐 Login System',
-        'welcome-desc': 'Secure and professional authentication with JWT, bcrypt and PostgreSQL',
-        'feat1': 'Registration',
-        'feat2': 'Secure Login',
-        'feat3': 'JWT Tokens',
-        'feat4': 'Password Reset',
-        'btn-api': 'Test API',
-        'btn-github': 'View GitHub',
-        'footer-text': 'Developed by David Arsénio Martins • 2026 © All rights reserved'
+        'welcome-desc': 'Secure and professional authentication',
+        'btn-login-welcome-text': 'Login',
+        'btn-register-welcome-text': 'Create Account',
+        'login-title': 'Login',
+        'login-subtitle': 'Access your account',
+        'email-label': 'Email',
+        'password-label': 'Password',
+        'login-btn-text': 'Login',
+        'register-link-text': "Don't have an account? ",
+        'register-link': 'Register',
+        'forgot-password-link': 'Forgot your password?',
+        'register-title': 'Create Account',
+        'register-subtitle': 'Join us now',
+        'username-label': 'Username',
+        'email-register-label': 'Email',
+        'password-register-label': 'Password',
+        'password-confirm-label': 'Confirm Password',
+        'register-btn-text': 'Register',
+        'login-link-text': 'Already have an account? ',
+        'login-link': 'Login',
+        'dashboard-title': 'Dashboard',
+        'dashboard-subtitle': 'Welcome!',
+        'profile-card-title': '👤 Profile',
+        'user-email-label': 'Email:',
+        'user-username-label': 'Username:',
+        'user-id-label': 'ID:',
+        'token-card-title': '🔑 Access Token',
+        'refresh-card-title': '🔄 Refresh Token',
+        'copy-access-text': 'Copy',
+        'copy-refresh-text': 'Copy',
+        'change-password-text': 'Change Password',
+        'reset-title': 'Change Password',
+        'reset-subtitle': 'Update your password',
+        'email-reset-label': 'Email',
+        'reset-request-btn-text': 'Send Link',
+        'back-to-login-link': 'Back to Login',
+        'footer-text': 'Developed by David Arsénio Martins • 2026 © All rights reserved',
+        'logout-text': 'Logout',
+        'pt-btn': 'PT',
+        'en-btn': 'EN',
       }
     };
 
-    // Language Management
+    // ========== STATE MANAGEMENT ==========
     let currentLanguage = localStorage.getItem('language') || 'pt';
+    let currentSection = 'welcome';
+    let authToken = localStorage.getItem('accessToken');
+    let currentUser = null;
 
+    // ========== LANGUAGE ==========
     function setLanguage(lang) {
       currentLanguage = lang;
       localStorage.setItem('language', lang);
-      updateLanguage();
-      updateButtons();
+      updateAllText();
+      updateLanguageButtons();
     }
 
-    function updateLanguage() {
+    function updateAllText() {
       const trans = translations[currentLanguage];
       Object.keys(trans).forEach(key => {
         const element = document.getElementById(key);
@@ -549,18 +853,215 @@
       });
     }
 
-    function updateButtons() {
+    function updateLanguageButtons() {
       const ptBtn = document.getElementById('pt-btn');
       const enBtn = document.getElementById('en-btn');
-
       ptBtn.classList.toggle('active', currentLanguage === 'pt');
       enBtn.classList.toggle('active', currentLanguage === 'en');
     }
 
-    // Initialize
+    // ========== NAVIGATION ==========
+    function navigateTo(section) {
+      const sections = document.querySelectorAll('.section');
+      sections.forEach(s => s.classList.remove('active'));
+      
+      const targetSection = document.getElementById(section);
+      if (targetSection) {
+        targetSection.classList.add('active');
+        currentSection = section;
+
+        if (section === 'dashboard' && authToken) {
+          loadUserProfile();
+        }
+      }
+
+      // Update header visibility
+      const logoutBtn = document.getElementById('logout-btn');
+      const userInfo = document.getElementById('user-info');
+      if (section === 'dashboard') {
+        logoutBtn.style.display = 'block';
+        userInfo.style.display = 'block';
+      } else {
+        logoutBtn.style.display = 'none';
+        userInfo.style.display = 'none';
+      }
+    }
+
+    // ========== ALERT SYSTEM ==========
+    function showAlert(sectionId, message, isError = false) {
+      const alertEl = document.getElementById(`${sectionId}-alert`);
+      alertEl.textContent = message;
+      alertEl.classList.add('show');
+      alertEl.className = `alert show ${isError ? 'alert-error' : 'alert-success'}`;
+      
+      setTimeout(() => {
+        alertEl.classList.remove('show');
+      }, 5000);
+    }
+
+    // ========== API CALLS ==========
+    async function apiCall(endpoint, method = 'GET', body = null) {
+      const options = {
+        method,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      };
+
+      if (authToken) {
+        options.headers['Authorization'] = `Bearer ${authToken}`;
+      }
+
+      if (body) {
+        options.body = JSON.stringify(body);
+      }
+
+      try {
+        const response = await fetch(`/api/auth${endpoint}`, options);
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.error || 'Erro na requisição');
+        }
+
+        return data;
+      } catch (error) {
+        throw error;
+      }
+    }
+
+    // ========== AUTHENTICATION ==========
+    async function handleLogin(event) {
+      event.preventDefault();
+      
+      const email = document.getElementById('login-email').value;
+      const password = document.getElementById('login-password').value;
+
+      try {
+        const response = await apiCall('/login', 'POST', { email, password });
+        
+        localStorage.setItem('accessToken', response.tokens.accessToken);
+        localStorage.setItem('refreshToken', response.tokens.refreshToken);
+        authToken = response.tokens.accessToken;
+        currentUser = response.user;
+        
+        document.getElementById('username-display').textContent = `👋 ${response.user.username}`;
+        showAlert('login', currentLanguage === 'pt' ? 'Login realizado com sucesso! ✅' : 'Login successful! ✅');
+        
+        setTimeout(() => {
+          navigateTo('dashboard');
+        }, 1000);
+      } catch (error) {
+        showAlert('login', error.message, true);
+      }
+    }
+
+    async function handleRegister(event) {
+      event.preventDefault();
+      
+      const username = document.getElementById('register-username').value;
+      const email = document.getElementById('register-email').value;
+      const password = document.getElementById('register-password').value;
+      const passwordConfirm = document.getElementById('register-password-confirm').value;
+
+      if (password !== passwordConfirm) {
+        showAlert('register', currentLanguage === 'pt' ? 'As senhas não coincidem' : 'Passwords do not match', true);
+        return;
+      }
+
+      try {
+        const response = await apiCall('/register', 'POST', {
+          email,
+          username,
+          password,
+          passwordConfirm
+        });
+        
+        localStorage.setItem('accessToken', response.tokens.accessToken);
+        localStorage.setItem('refreshToken', response.tokens.refreshToken);
+        authToken = response.tokens.accessToken;
+        currentUser = response.user;
+        
+        document.getElementById('username-display').textContent = `👋 ${response.user.username}`;
+        showAlert('register', currentLanguage === 'pt' ? 'Registo realizado com sucesso! ✅' : 'Registration successful! ✅');
+        
+        setTimeout(() => {
+          navigateTo('dashboard');
+        }, 1000);
+      } catch (error) {
+        showAlert('register', error.message, true);
+      }
+    }
+
+    async function handleResetRequest(event) {
+      event.preventDefault();
+      
+      const email = document.getElementById('reset-email').value;
+
+      try {
+        const response = await apiCall('/request-password-reset', 'POST', { email });
+        showAlert('reset', currentLanguage === 'pt' ? 'Link enviado para o seu email! ✅' : 'Link sent to your email! ✅');
+      } catch (error) {
+        showAlert('reset', error.message, true);
+      }
+    }
+
+    async function loadUserProfile() {
+      if (!authToken) {
+        navigateTo('login');
+        return;
+      }
+
+      try {
+        const response = await apiCall('/profile');
+        currentUser = response.user;
+        
+        document.getElementById('profile-email').textContent = response.user.email;
+        document.getElementById('profile-username').textContent = response.user.username;
+        document.getElementById('profile-id').textContent = response.user.id;
+        document.getElementById('access-token').textContent = authToken;
+        document.getElementById('refresh-token').textContent = localStorage.getItem('refreshToken') || '-';
+      } catch (error) {
+        showAlert('dashboard', error.message, true);
+        logout();
+      }
+    }
+
+    function logout() {
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('refreshToken');
+      authToken = null;
+      currentUser = null;
+      document.getElementById('username-display').textContent = '';
+      navigateTo('welcome');
+    }
+
+    // ========== UTILITY ==========
+    function copyToClipboard(elementId) {
+      const element = document.getElementById(elementId);
+      const text = element.textContent;
+      
+      navigator.clipboard.writeText(text).then(() => {
+        const btn = event.target.closest('.copy-btn');
+        const originalText = btn.textContent;
+        btn.textContent = currentLanguage === 'pt' ? '✅ Copiado!' : '✅ Copied!';
+        setTimeout(() => {
+          btn.textContent = originalText;
+        }, 2000);
+      });
+    }
+
+    // ========== INITIALIZATION ==========
     document.addEventListener('DOMContentLoaded', () => {
-      updateLanguage();
-      updateButtons();
+      updateAllText();
+      updateLanguageButtons();
+
+      // Check if user is already logged in
+      if (authToken) {
+        navigateTo('dashboard');
+      } else {
+        navigateTo('welcome');
+      }
     });
   </script>
 </body>
