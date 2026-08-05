@@ -6,6 +6,7 @@ const authRoutes = require('./routes/auth');
 const createUsersTable = require('./db/migrations');
 
 const app = express();
+const path = require('path');
 
 // Middlewares de segurança
 app.use(helmet());
@@ -14,6 +15,9 @@ app.use(cors());
 // Middlewares de parsing
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Servir ficheiros estáticos (HTML, CSS, JS)
+app.use(express.static(path.join(__dirname, '..')));
 
 // Rotas
 app.use('/api/auth', authRoutes);
