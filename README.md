@@ -1,295 +1,361 @@
-# 🔐 Sistema de Login com JWT
+# 🔐 Login System JWT
 
-Um sistema robusto e seguro de autenticação com JSON Web Tokens (JWT), desenvolvido com **Express.js**, **PostgreSQL**, **bcrypt** e **Nodemailer**.
+A modern, elegant and secure authentication system with JSON Web Tokens (JWT), built with Express.js, PostgreSQL, bcrypt and Nodemailer.
 
-## ✨ Funcionalidades
+Login System JWT is a professional-grade authentication backend that demonstrates modern security practices, clean architecture and best practices in Node.js development. Features a beautiful splash screen, bilingual support (PT/EN), animated glassmorphism interface and comprehensive API documentation.
 
-- ✅ **Cadastro e Login** - Registro de novos usuários e autenticação segura
-- ✅ **Hash de Senha** - Senhas criptografadas com bcrypt
-- ✅ **Tokens JWT** - Access token (15 minutos) + Refresh token (7 dias)
-- ✅ **Middleware de Autenticação** - Proteção de rotas
-- ✅ **Reset de Senha** - Solicitação e resetagem de senha via email
-- ✅ **Segurança** - Helmet + CORS + Validação de entrada
-- ✅ **Email** - Integração com Nodemailer para notificações
+---
 
-## 🛠️ Stack Tecnológico
+## ✨ Main Features
 
-| Tecnologia | Versão | Propósito |
-|------------|--------|----------|
-| **Express.js** | ^4.18.2 | Framework web |
-| **PostgreSQL** | Via `pg` | Banco de dados |
-| **JWT** | ^9.1.2 | Autenticação stateless |
-| **bcryptjs** | ^2.4.3 | Hash de senhas |
-| **Nodemailer** | ^6.9.7 | Envio de emails |
-| **Helmet** | ^7.1.0 | Segurança HTTP |
-| **CORS** | ^2.8.5 | Controle de origem cruzada |
-| **Dotenv** | ^16.3.1 | Variáveis de ambiente |
+- 📝 **User Registration** — Complete user registration with validation and email confirmation
+- 🔑 **Secure Login** — Password authentication with bcrypt hashing (10 rounds)
+- 🎫 **JWT Authentication** — Access tokens (15m) + Refresh tokens (7d) for secure, stateless auth
+- 🛡️ **Protected Routes** — Middleware-based route protection with token verification
+- 🔄 **Token Refresh** — Seamless token renewal without re-authentication
+- 📧 **Password Reset** — Secure password recovery via email with time-limited tokens
+- 👤 **User Profile** — Protected endpoint to retrieve authenticated user data
+- 🌍 **Bilingual Interface** — One-click toggle between Portuguese and English
+- 🎨 **Glassmorphism UI** — Modern animated interface with smooth transitions
+- 🎬 **Splash Screen** — Elegant intro screen with creator information and links
+- 🔒 **Security Headers** — Helmet.js for HTTP security + CORS configuration
+- 📊 **Database Indexes** — Optimized PostgreSQL queries with proper indexing
+- ⚙️ **Environment Configuration** — Dotenv for secure configuration management
 
-## 📋 Pré-requisitos
+---
 
-- Node.js v14+
-- PostgreSQL instalado e rodando
-- npm ou yarn
+## 🛠️ Technologies
 
-## 🚀 Instalação
+<div align="center">
 
-### 1. Clone o repositório
+[![Express.js](https://img.shields.io/badge/Express.js-4.18.2-000?style=flat&logo=express&logoColor=white)](https://expressjs.com/)
+[![Node.js](https://img.shields.io/badge/Node.js-18+-339933?style=flat&logo=node.js&logoColor=white)](https://nodejs.org/)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-12+-336791?style=flat&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
+[![JWT](https://img.shields.io/badge/JWT-9.0.0-000?style=flat&logo=json-web-tokens&logoColor=white)](https://jwt.io/)
+[![bcryptjs](https://img.shields.io/badge/bcryptjs-2.4.3-FF6B00?style=flat&logo=npm&logoColor=white)](https://www.npmjs.com/package/bcryptjs)
+[![Nodemailer](https://img.shields.io/badge/Nodemailer-6.9.0-46C3D6?style=flat&logo=npm&logoColor=white)](https://nodemailer.com/)
+
+</div>
+
+| Category | Technology | Purpose |
+|----------|-----------|---------|
+| **Backend Framework** | Express.js 4.18.2 | Lightweight, fast web server |
+| **Database** | PostgreSQL 12+ | Reliable relational database |
+| **Authentication** | JWT 9.0.0 | Stateless token-based auth |
+| **Password Security** | bcryptjs 2.4.3 | Industry-standard password hashing |
+| **Email Service** | Nodemailer 6.9.0 | Email notifications and password reset |
+| **Security** | Helmet 7.0.0 | HTTP security headers |
+| **CORS** | cors 2.8.5 | Cross-origin resource sharing |
+| **Config** | dotenv 16.0.3 | Environment variable management |
+
+---
+
+## 🧱 Project Structure
+
+```
+LoginSystemWithJWT/
+├── src/
+│   ├── controllers/
+│   │   └── authController.js          # Authentication logic (register, login, reset)
+│   ├── db/
+│   │   ├── config.js                  # PostgreSQL connection pool
+│   │   └── migrations.js              # Database schema initialization
+│   ├── middleware/
+│   │   └── auth.js                    # JWT verification and token refresh
+│   ├── models/
+│   │   └── User.js                    # User model with bcrypt integration
+│   ├── routes/
+│   │   └── auth.js                    # Authentication endpoints
+│   ├── services/
+│   │   └── emailService.js            # Email sending service (Nodemailer)
+│   ├── utils/
+│   │   └── generateTokens.js          # JWT token generation utilities
+│   └── server.js                      # Express server entry point
+├── index.html                         # Beautiful UI with bilingual support
+├── .env.example                       # Environment variables template
+├── .gitignore                         # Git ignore rules
+├── package.json                       # Dependencies and scripts
+├── LICENSE                            # MIT License
+├── GITHUB_CONFIG.md                   # GitHub repository configuration guide
+└── README.md                          # This file
+
+```
+
+---
+
+## ▶️ How to Run
+
+### Prerequisites
+
+- **Node.js** 16+ ([Download](https://nodejs.org/))
+- **PostgreSQL** 12+ ([Download](https://www.postgresql.org/download/))
+- **npm** or **yarn** (included with Node.js)
+
+### Installation
+
+1. **Clone the repository:**
 
 ```bash
 git clone https://github.com/VidiPT89/LoginSystemWithJWT.git
 cd LoginSystemWithJWT
 ```
 
-### 2. Instale as dependências
+2. **Install dependencies:**
 
 ```bash
 npm install
 ```
 
-### 3. Configure as variáveis de ambiente
+3. **Create PostgreSQL database:**
 
 ```bash
-cp .env.example .env
-```
-
-Abra `.env` e configure:
-
-```env
-# Database
-DB_HOST=localhost
-DB_PORT=5432
-DB_NAME=login_system
-DB_USER=postgres
-DB_PASSWORD=sua_senha
-
-# JWT
-JWT_SECRET=sua_chave_secreta_super_segura
-JWT_REFRESH_SECRET=sua_chave_secreta_refresh
-JWT_EXPIRES_IN=15m
-JWT_REFRESH_EXPIRES_IN=7d
-
-# Email (Gmail)
-EMAIL_SERVICE=gmail
-EMAIL_USER=seu_email@gmail.com
-EMAIL_PASSWORD=sua_senha_app_gmail  # Use App Password do Google
-EMAIL_FROM=noreply@loginsystem.com
-
-# Server
-PORT=3000
-NODE_ENV=development
-FRONTEND_URL=http://localhost:3000
-```
-
-### 4. Crie o banco de dados
-
-```bash
-# Conecte ao PostgreSQL
 psql -U postgres
-
-# Crie o banco
 CREATE DATABASE login_system;
-
-# Saia do PostgreSQL
 \q
 ```
 
-### 5. Execute as migrations
+4. **Configure environment variables:**
+
+```bash
+cp .env.example .env
+# Edit .env with your PostgreSQL credentials and JWT secrets
+nano .env
+```
+
+5. **Initialize database:**
 
 ```bash
 npm run migrate
 ```
 
-Isso criará automaticamente a tabela `users` com os índices necessários.
+6. **Start development server:**
 
-### 6. Inicie o servidor
-
-**Modo desenvolvimento (com auto-reload):**
 ```bash
 npm run dev
 ```
 
-**Modo produção:**
-```bash
-npm start
-```
+The API will be available at `http://localhost:3000`  
+The UI will be available at `http://localhost:3000/index.html`
 
-O servidor estará disponível em: `http://localhost:3000`
+---
 
-## 📚 Endpoints da API
+## 📦 Available Scripts
 
-### Autenticação Pública
+- **`npm run dev`** — Start development server with auto-reload (nodemon)
+- **`npm start`** — Start production server
+- **`npm run migrate`** — Initialize database and create tables
 
-#### 1. **Registrar Novo Usuário**
+---
+
+## 🔌 API Endpoints
+
+### Public Endpoints (No Authentication Required)
+
+#### **Register User**
 ```http
 POST /api/auth/register
 Content-Type: application/json
 
 {
-  "email": "usuario@exemplo.com",
-  "username": "meu_usuario",
-  "password": "senha123",
-  "passwordConfirm": "senha123"
+  "email": "user@example.com",
+  "username": "john_doe",
+  "password": "SecurePassword123",
+  "passwordConfirm": "SecurePassword123"
 }
 ```
 
-**Resposta (201):**
+**Response:** `201 Created`
 ```json
 {
-  "message": "Usuário registrado com sucesso! ✅",
+  "message": "User registered successfully! ✅",
   "user": {
     "id": 1,
-    "email": "usuario@exemplo.com",
-    "username": "meu_usuario",
+    "email": "user@example.com",
+    "username": "john_doe",
     "is_verified": false,
-    "created_at": "2024-01-15T10:30:00.000Z"
+    "created_at": "2026-08-05T10:30:00Z"
   },
   "tokens": {
-    "accessToken": "eyJhbGciOiJIUzI1NiIs...",
-    "refreshToken": "eyJhbGciOiJIUzI1NiIs..."
+    "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+    "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
   }
 }
 ```
 
-#### 2. **Fazer Login**
+#### **Login**
 ```http
 POST /api/auth/login
 Content-Type: application/json
 
 {
-  "email": "usuario@exemplo.com",
-  "password": "senha123"
+  "email": "user@example.com",
+  "password": "SecurePassword123"
 }
 ```
 
-**Resposta (200):**
-```json
-{
-  "message": "Login realizado com sucesso! 🎉",
-  "user": {
-    "id": 1,
-    "email": "usuario@exemplo.com",
-    "username": "meu_usuario",
-    "is_verified": false
-  },
-  "tokens": {
-    "accessToken": "eyJhbGciOiJIUzI1NiIs...",
-    "refreshToken": "eyJhbGciOiJIUzI1NiIs..."
-  }
-}
-```
+**Response:** `200 OK` (same as register)
 
-#### 3. **Renovar Access Token**
+#### **Refresh Token**
 ```http
 POST /api/auth/refresh-token
 Content-Type: application/json
 
 {
-  "refreshToken": "eyJhbGciOiJIUzI1NiIs..."
+  "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
 }
 ```
 
-**Resposta (200):**
+**Response:** `200 OK`
 ```json
 {
-  "message": "Token atualizado com sucesso!",
+  "message": "Token updated successfully!",
   "tokens": {
-    "accessToken": "eyJhbGciOiJIUzI1NiIs...",
-    "refreshToken": "eyJhbGciOiJIUzI1NiIs..."
+    "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+    "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
   }
 }
 ```
 
-#### 4. **Solicitar Reset de Senha**
+#### **Request Password Reset**
 ```http
 POST /api/auth/request-password-reset
 Content-Type: application/json
 
 {
-  "email": "usuario@exemplo.com"
+  "email": "user@example.com"
 }
 ```
 
-**Resposta (200):**
-```json
-{
-  "message": "Se o email existe, um link de reset foi enviado"
-}
-```
-
-#### 5. **Resetar Senha**
+#### **Reset Password**
 ```http
 POST /api/auth/reset-password
 Content-Type: application/json
 
 {
-  "token": "token_recebido_no_email",
-  "newPassword": "nova_senha123",
-  "passwordConfirm": "nova_senha123"
+  "token": "reset_token_from_email",
+  "newPassword": "NewPassword123",
+  "passwordConfirm": "NewPassword123"
 }
 ```
 
-**Resposta (200):**
-```json
-{
-  "message": "Senha resetada com sucesso! ✅",
-  "user": {
-    "id": 1,
-    "email": "usuario@exemplo.com",
-    "username": "meu_usuario"
-  }
-}
-```
+### Protected Endpoints (Require JWT Token)
 
-### Autenticação Protegida
-
-#### 6. **Obter Perfil do Usuário**
+#### **Get User Profile**
 ```http
 GET /api/auth/profile
-Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 ```
 
-**Resposta (200):**
+**Response:** `200 OK`
 ```json
 {
-  "message": "Perfil carregado com sucesso!",
+  "message": "Profile loaded successfully!",
   "user": {
     "id": 1,
-    "email": "usuario@exemplo.com",
-    "username": "meu_usuario",
+    "email": "user@example.com",
+    "username": "john_doe",
     "is_verified": false,
-    "created_at": "2024-01-15T10:30:00.000Z"
+    "created_at": "2026-08-05T10:30:00Z"
   }
 }
 ```
 
-## 🔒 Segurança
+---
 
-### Boas Práticas Implementadas
+## 🧪 Testing the API
 
-1. **Criptografia de Senhas**: Usando bcryptjs com 10 rounds
-2. **JWT Seguro**: Access tokens com curta duração + Refresh tokens com longa duração
-3. **Validação de Entrada**: Verificação de todos os campos obrigatórios
-4. **Rate Limiting**: Recomenda-se usar `express-rate-limit` em produção
-5. **HTTPS**: Use HTTPS em produção
-6. **Helmet**: Headers HTTP seguros
-7. **CORS**: Controle de origem configurável
-8. **Tokens de Reset**: Com expiração de 1 hora
-
-### Recomendações para Produção
+### Using cURL
 
 ```bash
-# Instale rate limiter
-npm install express-rate-limit
+# Register
+curl -X POST http://localhost:3000/api/auth/register \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "test@example.com",
+    "username": "testuser",
+    "password": "Test123!",
+    "passwordConfirm": "Test123!"
+  }'
 
-# Use com HTTPS
-# Configure NGINX como proxy reverso
-# Use variáveis de ambiente seguras
-# Configure backup do banco de dados
+# Login
+curl -X POST http://localhost:3000/api/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "test@example.com",
+    "password": "Test123!"
+  }'
+
+# Get Profile (replace TOKEN with actual token)
+curl -X GET http://localhost:3000/api/auth/profile \
+  -H "Authorization: Bearer TOKEN"
 ```
 
-## 📊 Estrutura do Banco de Dados
+### Using Postman
 
-### Tabela: `users`
+Import the API collection from `CURL_EXAMPLES.txt` or `EXAMPLES.md`
+
+### Using VS Code REST Client
+
+Install the [REST Client](https://marketplace.visualstudio.com/items?itemName=humao.rest-client) extension and use the examples in `CURL_EXAMPLES.txt`
+
+---
+
+## 🔐 Security Features
+
+- **Bcrypt Password Hashing** — 10 rounds for strong, resistant hashing
+- **JWT Tokens** — Stateless authentication with short-lived access tokens
+- **Token Refresh** — Secure token rotation without re-authentication
+- **Environment Variables** — Sensitive data stored securely in `.env`
+- **Password Reset Tokens** — Time-limited reset tokens (1 hour expiry)
+- **HTTP Security Headers** — Helmet.js for XSS, CSRF and clickjacking protection
+- **CORS Configuration** — Controlled cross-origin access
+- **Input Validation** — All endpoints validate input data
+- **Error Handling** — Secure error messages (no sensitive data leakage)
+- **Database Indexes** — Optimized queries on email and username
+
+---
+
+## 🌍 Environment Variables
+
+Create a `.env` file based on `.env.example`:
+
+```env
+# Database Configuration
+DB_HOST=localhost
+DB_PORT=5432
+DB_NAME=login_system
+DB_USER=postgres
+DB_PASSWORD=your_secure_password
+
+# JWT Configuration (Change in production!)
+JWT_SECRET=your_super_secret_key_here_change_in_production
+JWT_REFRESH_SECRET=your_refresh_secret_key_change_in_production
+JWT_EXPIRES_IN=15m
+JWT_REFRESH_EXPIRES_IN=7d
+
+# Email Service (Gmail SMTP)
+EMAIL_SERVICE=gmail
+EMAIL_USER=your_email@gmail.com
+EMAIL_PASSWORD=your_app_password_from_google
+EMAIL_FROM=noreply@yourapp.com
+
+# Server Configuration
+PORT=3000
+NODE_ENV=development
+FRONTEND_URL=http://localhost:3000
+```
+
+### Email Configuration (Gmail)
+
+1. Enable 2-Factor Authentication on your Google Account
+2. Generate an App Password: [Google Account Security](https://myaccount.google.com/apppasswords)
+3. Use the generated password in `.env` as `EMAIL_PASSWORD`
+
+---
+
+## 📊 Database Schema
+
+### Users Table
 
 ```sql
 CREATE TABLE users (
@@ -308,105 +374,177 @@ CREATE INDEX idx_users_email ON users(email);
 CREATE INDEX idx_users_username ON users(username);
 ```
 
-## 📁 Estrutura do Projeto
+---
 
+## 🎯 Frontend Integration
+
+The `index.html` file includes:
+
+- **Bilingual Support** — Portuguese (PT) and English (EN)
+- **Splash Screen** — Beautiful intro with creator information
+- **Glassmorphism UI** — Modern animated interface
+- **Responsive Design** — Mobile to desktop
+- **Creator Credits** — Links to portfolio and GitHub
+
+**Customization:**
+
+```javascript
+// Change language
+setLanguage('en');  // or 'pt'
+
+// Access current language
+console.log(currentLanguage);
+
+// Add more translations in the `translations` object
 ```
-LoginSystemWithJWT/
-├── src/
-│   ├── controllers/
-│   │   └── authController.js      # Lógica de autenticação
-│   ├── db/
-│   │   ├── config.js              # Configuração do PostgreSQL
-│   │   └── migrations.js           # Criação de tabelas
-│   ├── middleware/
-│   │   └── auth.js                # Middleware de autenticação
-│   ├── models/
-│   │   └── User.js                # Modelo de usuário
-│   ├── routes/
-│   │   └── auth.js                # Rotas de autenticação
-│   ├── services/
-│   │   └── emailService.js        # Serviço de email
-│   ├── utils/
-│   │   └── generateTokens.js      # Geração de tokens JWT
-│   └── server.js                  # Entrada principal
-├── .env.example                   # Variáveis de exemplo
-├── .gitignore                     # Arquivos ignorados
-├── package.json                   # Dependências
-└── README.md                      # Este arquivo
-```
-
-## 🧪 Testando com cURL
-
-### Registrar usuário
-```bash
-curl -X POST http://localhost:3000/api/auth/register \
-  -H "Content-Type: application/json" \
-  -d '{
-    "email": "teste@exemplo.com",
-    "username": "usuario_teste",
-    "password": "senha123",
-    "passwordConfirm": "senha123"
-  }'
-```
-
-### Fazer login
-```bash
-curl -X POST http://localhost:3000/api/auth/login \
-  -H "Content-Type: application/json" \
-  -d '{
-    "email": "teste@exemplo.com",
-    "password": "senha123"
-  }'
-```
-
-### Acessar perfil protegido
-```bash
-curl -X GET http://localhost:3000/api/auth/profile \
-  -H "Authorization: Bearer SEU_ACCESS_TOKEN_AQUI"
-```
-
-## 📧 Configurar Email (Gmail)
-
-1. **Ative 2FA** na sua conta Google
-2. **Gere uma App Password**: https://myaccount.google.com/apppasswords
-3. **Use essa senha** no `.env` como `EMAIL_PASSWORD`
-
-## 🐛 Troubleshooting
-
-### Erro: "ECONNREFUSED" no PostgreSQL
-- Verifique se PostgreSQL está rodando: `brew services list`
-- Inicie se necessário: `brew services start postgresql`
-
-### Erro: "connect ECONNREFUSED" no servidor
-- Certifique-se que não há outra aplicação na porta 3000
-- Mude a porta no `.env`
-
-### Email não sendo enviado
-- Verifique credenciais no `.env`
-- Use App Password do Google (não a senha da conta)
-- Verifique se está em ambiente de produção seguro
-
-## 🤝 Contribuindo
-
-1. Faça um Fork
-2. Crie uma branch (`git checkout -b feature/AmazingFeature`)
-3. Commit suas mudanças (`git commit -m 'Add some AmazingFeature'`)
-4. Push para a branch (`git push origin feature/AmazingFeature`)
-5. Abra um Pull Request
-
-## 📄 Licença
-
-Este projeto está sob a licença ISC.
-
-## 👨‍💻 Autor
-
-**VidiPT89**
-- GitHub: [@VidiPT89](https://github.com/VidiPT89)
-
-## 📞 Suporte
-
-Se tiver dúvidas ou encontrar problemas, abra uma issue no GitHub!
 
 ---
 
-**Desenvolvido com ❤️ usando Node.js e PostgreSQL**
+## 🧩 Project Highlights
+
+This project demonstrates:
+
+- **Clean Architecture** — Separation of concerns (controllers, models, services)
+- **Security Best Practices** — Bcrypt hashing, JWT tokens, input validation
+- **RESTful API Design** — Proper HTTP methods and status codes
+- **Database Optimization** — Indexes and connection pooling
+- **Error Handling** — Comprehensive error handling with meaningful messages
+- **Configuration Management** — Environment-based configuration
+- **Code Organization** — Logical folder structure and naming conventions
+- **Modern JavaScript** — ES6+ syntax, async/await, arrow functions
+- **Bilingual Support** — i18n with localStorage persistence
+- **Professional UI** — Animated glassmorphism with modern aesthetics
+
+---
+
+## 🚀 Production Deployment
+
+Before deploying:
+
+1. **Generate Strong Secrets:**
+```bash
+node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+```
+
+2. **Set Environment Variables:**
+   - Update `.env` with production values
+   - Use a secrets manager (AWS Secrets Manager, GitHub Secrets, etc.)
+
+3. **Database:**
+   - Set up backups
+   - Use production-grade PostgreSQL instance
+   - Configure SSL connections
+
+4. **Security Enhancements:**
+   - Install `express-rate-limit` for rate limiting
+   - Enable HTTPS/SSL
+   - Configure CORS for your domain
+   - Set up firewall rules
+
+5. **Monitoring:**
+   - Enable logging
+   - Set up error tracking (Sentry, LogRocket)
+   - Monitor database performance
+
+---
+
+## 📚 Code Examples
+
+### Frontend Integration (JavaScript)
+
+```javascript
+// Register user
+async function register() {
+  const response = await fetch('http://localhost:3000/api/auth/register', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      email: 'user@example.com',
+      username: 'john_doe',
+      password: 'Secure123!',
+      passwordConfirm: 'Secure123!'
+    })
+  });
+
+  const data = await response.json();
+  localStorage.setItem('accessToken', data.tokens.accessToken);
+  localStorage.setItem('refreshToken', data.tokens.refreshToken);
+}
+
+// Access protected endpoint
+async function getProfile() {
+  const token = localStorage.getItem('accessToken');
+  const response = await fetch('http://localhost:3000/api/auth/profile', {
+    headers: { 'Authorization': `Bearer ${token}` }
+  });
+  
+  return await response.json();
+}
+```
+
+See `EXAMPLES.md` for more detailed code examples.
+
+---
+
+## 🐛 Troubleshooting
+
+### PostgreSQL Connection Error
+```bash
+# macOS
+brew services start postgresql
+
+# Linux
+sudo service postgresql start
+
+# Windows
+# Open Services and start PostgreSQL
+```
+
+### Port 3000 Already in Use
+```bash
+# Find and kill process
+lsof -i :3000
+kill -9 <PID>
+
+# Or change port in .env
+PORT=3001
+```
+
+### Database Does Not Exist
+```bash
+psql -U postgres
+CREATE DATABASE login_system;
+\q
+npm run migrate
+```
+
+### Email Not Sending
+- Verify Gmail App Password in `.env`
+- Check 2FA is enabled on Google Account
+- Ensure `EMAIL_USER` and `EMAIL_PASSWORD` are correct
+- Try with a test email from settings page
+
+---
+
+## 📄 License
+
+This project is licensed under the **MIT License**.
+
+See [LICENSE](LICENSE) for details.
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit issues and pull requests.
+
+---
+
+Developed by **David Arsénio Martins**  
+🌐 [ividi.dev](https://ividi.dev/)  
+💻 [github.com/VidiPT89](https://github.com/VidiPT89/)  
+💼 [LinkedIn](https://www.linkedin.com/in/david-martins-9b0129270/)
+
+---
+
+**Built with ❤️ using Node.js, Express.js and PostgreSQL**

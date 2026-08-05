@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🔐 Login System JWT</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --primary: #FF7A00;
+      --secondary: #FFAA00;
+      --dark: #000000;
+      --light: #F5F5F5;
+      --glass-bg: rgba(255, 122, 0, 0.1);
+      --glass-border: rgba(255, 122, 0, 0.2);
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
+      min-height: 100vh;
+      color: #fff;
+      overflow: hidden;
+    }
+
+    /* ========== SPLASH SCREEN ========== */
+    .splash {
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      animation: splashFadeOut 0.6s ease-out 2.4s forwards;
+    }
+
+    .splash-content {
+      text-align: center;
+      animation: splashSlideUp 0.8s ease-out 0.2s backwards;
+    }
+
+    .splash-icon {
+      font-size: 5rem;
+      margin-bottom: 1.5rem;
+      animation: iconBounce 1s ease-in-out infinite;
+    }
+
+    .splash-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      background: linear-gradient(135deg, #FF7A00, #FFAA00);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .splash-subtitle {
+      font-size: 1.1rem;
+      color: #ccc;
+      margin-bottom: 3rem;
+      letter-spacing: 1px;
+    }
+
+    .splash-creator {
+      animation: fadeInUp 0.8s ease-out 0.8s backwards;
+    }
+
+    .creator-text {
+      font-size: 0.95rem;
+      color: #aaa;
+      margin-bottom: 1rem;
+    }
+
+    .creator-links {
+      display: flex;
+      gap: 1.5rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .creator-link {
+      color: #FF7A00;
+      text-decoration: none;
+      font-size: 0.9rem;
+      padding: 0.5rem 1rem;
+      border: 1px solid #FF7A00;
+      border-radius: 25px;
+      transition: all 0.3s ease;
+    }
+
+    .creator-link:hover {
+      background: #FF7A00;
+      color: #000;
+    }
+
+    @keyframes splashFadeOut {
+      to {
+        opacity: 0;
+        pointer-events: none;
+      }
+    }
+
+    @keyframes splashSlideUp {
+      from {
+        transform: translateY(30px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    @keyframes fadeInUp {
+      from {
+        transform: translateY(20px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    @keyframes iconBounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-20px); }
+    }
+
+    /* ========== MAIN INTERFACE ========== */
+    .container {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      animation: fadeIn 0.6s ease-out 3s backwards;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    /* ========== HEADER ========== */
+    .header {
+      padding: 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--glass-border);
+      backdrop-filter: blur(10px);
+      background: var(--glass-bg);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      font-size: 1.5rem;
+      font-weight: 700;
+    }
+
+    .logo-icon {
+      font-size: 2rem;
+    }
+
+    .logo-text {
+      background: linear-gradient(135deg, #FF7A00, #FFAA00);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .language-toggle {
+      display: flex;
+      gap: 0.5rem;
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: 25px;
+      padding: 0.3rem;
+    }
+
+    .lang-btn {
+      padding: 0.5rem 1.2rem;
+      border: none;
+      background: transparent;
+      color: #aaa;
+      cursor: pointer;
+      border-radius: 20px;
+      transition: all 0.3s ease;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    .lang-btn.active {
+      background: linear-gradient(135deg, #FF7A00, #FFAA00);
+      color: #000;
+    }
+
+    /* ========== MAIN CONTENT ========== */
+    .main {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    .welcome-section {
+      text-align: center;
+      max-width: 600px;
+      animation: slideInFromBottom 0.8s ease-out 3.2s backwards;
+    }
+
+    @keyframes slideInFromBottom {
+      from {
+        transform: translateY(30px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    .welcome-title {
+      font-size: 3rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      background: linear-gradient(135deg, #FF7A00, #FFAA00);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .welcome-description {
+      font-size: 1.2rem;
+      color: #ccc;
+      margin-bottom: 2rem;
+      line-height: 1.6;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .feature-card {
+      padding: 1.5rem;
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: 15px;
+      backdrop-filter: blur(10px);
+      transition: all 0.3s ease;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-5px);
+      border-color: var(--primary);
+      background: rgba(255, 122, 0, 0.15);
+    }
+
+    .feature-icon {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .feature-name {
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 1rem 2rem;
+      border: none;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 1rem;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #FF7A00, #FFAA00);
+      color: #000;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(255, 122, 0, 0.3);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: #FF7A00;
+      border: 2px solid #FF7A00;
+    }
+
+    .btn-secondary:hover {
+      background: #FF7A00;
+      color: #000;
+    }
+
+    /* ========== FOOTER ========== */
+    .footer {
+      padding: 2rem;
+      text-align: center;
+      color: #666;
+      font-size: 0.9rem;
+      border-top: 1px solid var(--glass-border);
+      backdrop-filter: blur(10px);
+      background: var(--glass-bg);
+    }
+
+    .footer-links {
+      margin-bottom: 1rem;
+    }
+
+    .footer-link {
+      color: #FF7A00;
+      text-decoration: none;
+      margin: 0 1rem;
+      transition: color 0.3s ease;
+    }
+
+    .footer-link:hover {
+      color: #FFAA00;
+    }
+
+    /* ========== RESPONSIVE ========== */
+    @media (max-width: 768px) {
+      .welcome-title {
+        font-size: 2rem;
+      }
+
+      .splash-title {
+        font-size: 2rem;
+      }
+
+      .features-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .btn-group {
+        flex-direction: column;
+      }
+
+      .btn {
+        width: 100%;
+      }
+
+      .logo-text {
+        display: none;
+      }
+    }
+
+    /* ========== ANIMATIONS ========== */
+    .floating-orbs {
+      position: fixed;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .orb {
+      position: absolute;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, rgba(255, 122, 0, 0.3), transparent);
+      filter: blur(60px);
+    }
+
+    .orb1 {
+      width: 300px;
+      height: 300px;
+      top: 10%;
+      right: 10%;
+      animation: float 8s infinite ease-in-out;
+    }
+
+    .orb2 {
+      width: 250px;
+      height: 250px;
+      bottom: 10%;
+      left: 10%;
+      animation: float 10s infinite ease-in-out reverse;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translate(0, 0); }
+      50% { transform: translate(30px, 30px); }
+    }
+  </style>
+</head>
+<body>
+  <!-- Floating Background Orbs -->
+  <div class="floating-orbs">
+    <div class="orb orb1"></div>
+    <div class="orb orb2"></div>
+  </div>
+
+  <!-- Splash Screen -->
+  <div class="splash">
+    <div class="splash-content">
+      <div class="splash-icon">🔐</div>
+      <h1 class="splash-title" id="splash-title">Login System JWT</h1>
+      <p class="splash-subtitle" id="splash-subtitle">Autenticação Segura</p>
+    </div>
+
+    <div class="splash-creator">
+      <p class="creator-text" id="developed-by">Desenvolvido por David Arsénio Martins</p>
+      <div class="creator-links">
+        <a href="https://ividi.dev/" class="creator-link" target="_blank">🌐 ividi.dev</a>
+        <a href="https://github.com/VidiPT89/" class="creator-link" target="_blank">💻 GitHub</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Interface -->
+  <div class="container">
+    <!-- Header -->
+    <header class="header">
+      <div class="logo">
+        <span class="logo-icon">🔐</span>
+        <span class="logo-text" id="header-title">Login JWT</span>
+      </div>
+
+      <div class="language-toggle">
+        <button class="lang-btn active" onclick="setLanguage('pt')" id="pt-btn">PT</button>
+        <button class="lang-btn" onclick="setLanguage('en')" id="en-btn">EN</button>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+      <section class="welcome-section">
+        <h1 class="welcome-title" id="welcome-title">🔐 Sistema de Login</h1>
+        <p class="welcome-description" id="welcome-desc">
+          Autenticação segura e profissional com JWT, bcrypt e PostgreSQL
+        </p>
+
+        <div class="features-grid">
+          <div class="feature-card">
+            <div class="feature-icon">👤</div>
+            <div class="feature-name" id="feat1">Registro</div>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">🔑</div>
+            <div class="feature-name" id="feat2">Login Seguro</div>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">🔓</div>
+            <div class="feature-name" id="feat3">JWT Tokens</div>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">📧</div>
+            <div class="feature-name" id="feat4">Reset Password</div>
+          </div>
+        </div>
+
+        <div class="btn-group">
+          <button class="btn btn-primary" onclick="window.location.href='http://localhost:3000/api/health'">
+            <span id="btn-api">Testar API</span>
+          </button>
+          <button class="btn btn-secondary" onclick="window.location.href='https://github.com/VidiPT89/LoginSystemWithJWT'">
+            <span id="btn-github">Ver GitHub</span>
+          </button>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="footer-links">
+        <a href="https://ividi.dev/" class="footer-link" target="_blank">🌐 ividi.dev</a>
+        <a href="https://github.com/VidiPT89/" class="footer-link" target="_blank">💻 GitHub</a>
+        <a href="https://www.linkedin.com/in/david-martins-9b0129270/" class="footer-link" target="_blank">💼 LinkedIn</a>
+      </div>
+      <p id="footer-text">Desenvolvido por David Arsénio Martins • 2026 © Todos os direitos reservados</p>
+    </footer>
+  </div>
+
+  <script>
+    // Translations
+    const translations = {
+      pt: {
+        'splash-title': 'Login System JWT',
+        'splash-subtitle': 'Autenticação Segura',
+        'developed-by': 'Desenvolvido por David Arsénio Martins',
+        'header-title': 'Login JWT',
+        'welcome-title': '🔐 Sistema de Login',
+        'welcome-desc': 'Autenticação segura e profissional com JWT, bcrypt e PostgreSQL',
+        'feat1': 'Registro',
+        'feat2': 'Login Seguro',
+        'feat3': 'JWT Tokens',
+        'feat4': 'Reset Password',
+        'btn-api': 'Testar API',
+        'btn-github': 'Ver GitHub',
+        'footer-text': 'Desenvolvido por David Arsénio Martins • 2026 © Todos os direitos reservados'
+      },
+      en: {
+        'splash-title': 'Login System JWT',
+        'splash-subtitle': 'Secure Authentication',
+        'developed-by': 'Developed by David Arsénio Martins',
+        'header-title': 'Login JWT',
+        'welcome-title': '🔐 Login System',
+        'welcome-desc': 'Secure and professional authentication with JWT, bcrypt and PostgreSQL',
+        'feat1': 'Registration',
+        'feat2': 'Secure Login',
+        'feat3': 'JWT Tokens',
+        'feat4': 'Password Reset',
+        'btn-api': 'Test API',
+        'btn-github': 'View GitHub',
+        'footer-text': 'Developed by David Arsénio Martins • 2026 © All rights reserved'
+      }
+    };
+
+    // Language Management
+    let currentLanguage = localStorage.getItem('language') || 'pt';
+
+    function setLanguage(lang) {
+      currentLanguage = lang;
+      localStorage.setItem('language', lang);
+      updateLanguage();
+      updateButtons();
+    }
+
+    function updateLanguage() {
+      const trans = translations[currentLanguage];
+      Object.keys(trans).forEach(key => {
+        const element = document.getElementById(key);
+        if (element) {
+          element.textContent = trans[key];
+        }
+      });
+    }
+
+    function updateButtons() {
+      const ptBtn = document.getElementById('pt-btn');
+      const enBtn = document.getElementById('en-btn');
+
+      ptBtn.classList.toggle('active', currentLanguage === 'pt');
+      enBtn.classList.toggle('active', currentLanguage === 'en');
+    }
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', () => {
+      updateLanguage();
+      updateButtons();
+    });
+  </script>
+</body>
+</html>
